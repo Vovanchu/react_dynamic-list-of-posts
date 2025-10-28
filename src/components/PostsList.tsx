@@ -13,24 +13,20 @@ export const PostsList: React.FC<PostsListProps> = ({
   setSelectedPostId,
 }) => {
   const [userPosts, setUserPosts] = useState<Post[]>([]);
-  const [loading, setLoading] = useState<boolean>(false);
-  const [activePostId, setActivePostId] = React.useState<number | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [activePostId, setActivePostId] = useState<number | null>(null);
+  const [error, setError] = useState(false);
 
   useEffect(() => {
     if (userId) {
       setLoading(true);
+      setError(false);
+
       client
         .get<Post[]>(`/posts?userId=${userId}`)
-        .then(posts => {
-          setUserPosts(posts);
-        })
-        .catch(error => {
-          // eslint-disable-next-line no-console
-          console.error('Error fetching posts:', error);
-        })
-        .finally(() => {
-          setLoading(false);
-        });
+        .then(posts => setUserPosts(posts))
+        .catch(() => setError(true))
+        .finally(() => setLoading(false));
     }
   }, [userId]);
 
@@ -40,7 +36,11 @@ export const PostsList: React.FC<PostsListProps> = ({
         <Loader />
       ) : (
         <div data-cy="PostsList">
-          {userPosts.length === 0 ? (
+          {error ? (
+            <div className="notification is-danger" data-cy="PostsLoadingError">
+              Something went wrong!
+            </div>
+          ) : userPosts.length === 0 ? (
             <div className="notification is-warning" data-cy="NoPostsYet">
               No posts yet
             </div>
@@ -50,19 +50,18 @@ export const PostsList: React.FC<PostsListProps> = ({
 
               <table
                 className="
-            table 
-            is-fullwidth 
-            is-striped 
-            is-hoverable 
-            is-narrow
-          "
+                  table 
+                  is-fullwidth 
+                  is-striped 
+                  is-hoverable 
+                  is-narrow
+                "
               >
                 <thead>
                   <tr className="has-background-link-light">
                     <th>#</th>
                     <th>Title</th>
-                    {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
-                    <th> </th>
+                    <th></th>
                   </tr>
                 </thead>
 
@@ -78,10 +77,14 @@ export const PostsList: React.FC<PostsListProps> = ({
                           <button
                             type="button"
                             data-cy="PostButton"
-                            className={`button is-link ${isActive ? '' : 'is-light'}`}
+                            className={`button is-link ${
+                              isActive ? '' : 'is-light'
+                            }`}
                             onClick={() => {
-                              setActivePostId(isActive ? null : userPost.id);
-                              setSelectedPostId(isActive ? null : userPost.id);
+                              const newId = isActive ? null : userPost.id;
+
+                              setActivePostId(newId);
+                              setSelectedPostId(newId);
                             }}
                           >
                             {isActive ? 'Close' : 'Open'}

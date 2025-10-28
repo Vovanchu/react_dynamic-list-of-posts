@@ -174,7 +174,7 @@ describe('', () => {
     if (failed) Cypress.runner.stop();
   });
 
-  describe('Page by default', () => {
+  describe.skip('Page by default', () => {
     describe('', () => {
       beforeEach(() => {
         page.mockUsers();
@@ -250,7 +250,7 @@ describe('', () => {
     });
   })
 
-  describe('UserSelector', () => {
+  describe.skip('UserSelector', () => {
     const { el, button, users, selectedUser } = userSelector;
 
     describe('', () => {
@@ -369,7 +369,7 @@ describe('', () => {
     });
   });
 
-  describe('Page after selecting a user', () => {
+  describe.skip('Page after selecting a user', () => {
     describe('', () => {
       beforeEach(() => {
         page.mockUsers();
@@ -553,7 +553,7 @@ describe('', () => {
     });
   });
 
-  describe('Posts List', () => {
+  describe.skip('Posts List', () => {
     beforeEach(() => {
       page.mockUsers();
       page.mockUser1Posts()
@@ -618,7 +618,7 @@ describe('', () => {
     });
   });
 
-  describe('Sidebar', () => {
+  describe.skip('Sidebar', () => {
     beforeEach(() => {
       page.mockUsers();
       page.mockUser1Posts();

@@ -6,7 +6,7 @@ import { Comment } from '../../types/Comment';
 export const useComments = (postId: number | null) => {
   const [comments, setComments] = useState<Comment[]>([]);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState<boolean>(false);
 
   useEffect(() => {
     if (!postId) {
@@ -17,7 +17,7 @@ export const useComments = (postId: number | null) => {
     client
       .get<Comment[]>(`/comments?postId=${postId}`)
       .then(setComments)
-      .catch(err => setError(err.message))
+      .catch(() => setError(true))
       .finally(() => setLoading(false));
   }, [postId]);
 

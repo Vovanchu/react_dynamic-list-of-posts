@@ -61,7 +61,9 @@ export const App = () => {
                   />
                 </div>
               ) : (
-                <p data-cy="NoSelectedUser">No user selected</p>
+                <div className="block" data-cy="MainContent">
+                  <p data-cy="NoSelectedUser">No user selected</p>
+                </div>
               )}
             </div>
           </div>
@@ -80,10 +82,12 @@ export const App = () => {
             {selectedPostId ? (
               <>
                 <div className="tile is-child box is-success ">
+                  <div className="content" data-cy="PostDetails">
                   <PostDetails
                     selectedPostId={selectedPostId}
                     userId={selectedUserId}
                   />
+                  </div>
                 </div>
               </>
             ) : null}
