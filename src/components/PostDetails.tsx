@@ -52,9 +52,8 @@ export const PostDetails: React.FC<Props> = ({
     try {
       await client.delete(`/comments/${commentId}`);
       setComments(prev => prev.filter(comment => comment.id !== commentId));
-    } catch (err) {
-      // eslint-disable-next-line no-console
-      console.error(err);
+    } catch {
+      alert('Something went wrong!');
     }
   };
 

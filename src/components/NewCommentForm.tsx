@@ -19,11 +19,18 @@ export const NewCommentForm: React.FC<Props> = ({ postId, onAddComment }) => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    setErrorName(name.trim() === '');
-    setErrorEmail(email.trim() === '');
-    setErrorBody(body.trim() === '');
+    const trimmedName = name.trim();
+    const trimmedEmail = email.trim();
+    const trimmedBody = body.trim();
 
-    if (!name || !email || !body) {
+    const hasError =
+      trimmedName === '' || trimmedEmail === '' || trimmedBody === '';
+
+    setErrorName(trimmedName === '');
+    setErrorEmail(trimmedEmail === '');
+    setErrorBody(trimmedBody === '');
+
+    if (hasError) {
       return;
     }
 
@@ -32,17 +39,17 @@ export const NewCommentForm: React.FC<Props> = ({ postId, onAddComment }) => {
     try {
       const savedComment = await client.post<Comment>('/comments', {
         postId,
-        name,
-        email,
-        body,
+        name: trimmedName,
+        email: trimmedEmail,
+        body: trimmedBody,
       });
 
       onAddComment(savedComment);
-
       setBody('');
+      setName('');
+      setEmail('');
     } catch (err) {
-      // eslint-disable-next-line no-console
-      console.error(err);
+      alert('Something went wrong!');
     } finally {
       setSubmitting(false);
     }
