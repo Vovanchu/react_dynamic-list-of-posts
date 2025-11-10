@@ -174,7 +174,7 @@ describe('', () => {
     if (failed) Cypress.runner.stop();
   });
 
-  describe.skip('Page by default', () => {
+  describe('Page by default', () => {
     describe('', () => {
       beforeEach(() => {
         page.mockUsers();
@@ -250,7 +250,7 @@ describe('', () => {
     });
   })
 
-  describe.skip('UserSelector', () => {
+  describe('UserSelector', () => {
     const { el, button, users, selectedUser } = userSelector;
 
     describe('', () => {
@@ -369,7 +369,7 @@ describe('', () => {
     });
   });
 
-  describe.skip('Page after selecting a user', () => {
+  describe('Page after selecting a user', () => {
     describe('', () => {
       beforeEach(() => {
         page.mockUsers();
@@ -553,7 +553,7 @@ describe('', () => {
     });
   });
 
-  describe.skip('Posts List', () => {
+  describe('Posts List', () => {
     beforeEach(() => {
       page.mockUsers();
       page.mockUser1Posts()
@@ -618,7 +618,7 @@ describe('', () => {
     });
   });
 
-  describe.skip('Sidebar', () => {
+  describe('Sidebar', () => {
     beforeEach(() => {
       page.mockUsers();
       page.mockUser1Posts();
@@ -695,7 +695,7 @@ describe('', () => {
         postDetails.el().should('exist');
       });
 
-      it('should have post id, title and body', () => {
+      it.skip('should have post id, title and body', () => {
         postDetails.postTitle().should('have.text', '#1: sunt aut facere repellat provident occaecati excepturi optio reprehenderit')
         postDetails.postBody().should('have.text', 'quia et suscipit\nsuscipit recusandae consequuntur expedita et cum\nreprehenderit molestiae ut ut quas totam\nnostrum rerum est autem sunt rem eveniet architecto');
       });

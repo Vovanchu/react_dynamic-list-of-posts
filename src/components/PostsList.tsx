@@ -6,11 +6,13 @@ import { Loader } from './Loader';
 type PostsListProps = {
   userId: number | null;
   setSelectedPostId: React.Dispatch<React.SetStateAction<number | null>>;
+  setShowNewCommentForm: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 export const PostsList: React.FC<PostsListProps> = ({
   userId,
   setSelectedPostId,
+  setShowNewCommentForm,
 }) => {
   const [userPosts, setUserPosts] = useState<Post[]>([]);
   const [loading, setLoading] = useState(false);
@@ -85,6 +87,7 @@ export const PostsList: React.FC<PostsListProps> = ({
 
                               setActivePostId(newId);
                               setSelectedPostId(newId);
+                              setShowNewCommentForm(false);
                             }}
                           >
                             {isActive ? 'Close' : 'Open'}

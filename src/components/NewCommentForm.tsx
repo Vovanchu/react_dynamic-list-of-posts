@@ -141,6 +141,7 @@ export const NewCommentForm: React.FC<Props> = ({ postId, onAddComment }) => {
             id="comment-body"
             name="body"
             placeholder="Type comment here"
+            value={body}
             className={`textarea ${errorBody ? 'is-danger' : ''}`}
             onChange={newCommentBody => setBody(newCommentBody.target.value)}
           />

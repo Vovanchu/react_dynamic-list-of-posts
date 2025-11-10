@@ -9,13 +9,22 @@ import { client } from '../utils/fetchClient';
 type Props = {
   userId: number | null;
   selectedPostId: number | null;
+  showNewCommentForm: boolean;
+  setShowNewCommentForm: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-export const PostDetails: React.FC<Props> = ({ userId, selectedPostId }) => {
-  const [showNewCommentForm, setShowNewCommentForm] = useState(false);
+export const PostDetails: React.FC<Props> = ({
+  userId,
+  selectedPostId,
+  showNewCommentForm,
+  setShowNewCommentForm,
+}) => {
   const { posts, loading: postsLoading, error } = usePosts(userId);
-  const { comments: initialComments, loading: commentsLoading } =
-    useComments(selectedPostId);
+  const {
+    comments: initialComments,
+    loading: commentsLoading,
+    error: commentsError,
+  } = useComments(selectedPostId);
   const [comments, setComments] = useState<Comment[]>(initialComments);
   const post = posts.find(p => p.id === selectedPostId);
 
@@ -23,12 +32,16 @@ export const PostDetails: React.FC<Props> = ({ userId, selectedPostId }) => {
     setComments(initialComments);
   }, [initialComments]);
 
-  if (postsLoading) {
-    return <Loader />;
-  }
-
   if (!post) {
-    return <div>No post selected</div>;
+    return postsLoading ? (
+      <Loader />
+    ) : (
+      <div className="block">
+        <div className="notification is-danger" data-cy="PostsLoadingError">
+          Something went wrong!
+        </div>
+      </div>
+    );
   }
 
   const addComment = (newComment: Comment) => {
@@ -48,9 +61,19 @@ export const PostDetails: React.FC<Props> = ({ userId, selectedPostId }) => {
   return (
     <>
       {error ? (
-        <div className="notification is-danger" data-cy="PostsLoadingError">
-          Something went wrong!
-        </div>
+        <>
+          <div className="block">
+            <h2 data-cy="PostTitle">
+              #{post.id}: {post.title}
+            </h2>
+            <p data-cy="PostBody">{post.body}</p>
+          </div>
+          <div className="block">
+            <div className="notification is-danger" data-cy="PostsLoadingError">
+              Something went wrong!
+            </div>
+          </div>
+        </>
       ) : (
         <>
           <div className="block">
@@ -61,39 +84,57 @@ export const PostDetails: React.FC<Props> = ({ userId, selectedPostId }) => {
           </div>
 
           <div className="block">
-            <h3>Comments</h3>
-
-            {commentsLoading ? (
+            {commentsError ? (
+              <div className="notification is-danger" data-cy="CommentsError">
+                Something went wrong while loading comments!
+              </div>
+            ) : commentsLoading ? (
               <Loader />
             ) : comments.length === 0 ? (
-              <p>No comments yet</p>
+              <p data-cy="NoCommentsMessage">No comments yet</p>
             ) : (
-              comments.map(comment => (
-                <div key={comment.id} className="message is-small">
-                  <div className="message-header">
-                    <a href={`mailto:${comment.email}`}>{comment.name}</a>
-                    <button
-                      className="delete"
-                      aria-label="delete"
-                      onClick={() => handleDelete(comment.id)}
-                    />
-                  </div>
-                  <div className="message-body">{comment.body}</div>
-                </div>
-              ))
+              <>
+                <h3>Comments</h3>
+                {comments.map(comment => (
+                  <article
+                    key={comment.id}
+                    className="message is-small"
+                    data-cy="Comment"
+                  >
+                    <div className="message-header">
+                      <a
+                        href={`mailto:${comment.email}`}
+                        data-cy="CommentAuthor"
+                      >
+                        {comment.name}
+                      </a>
+                      <button
+                        className="delete"
+                        aria-label="delete"
+                        onClick={() => handleDelete(comment.id)}
+                        data-cy="CommentDelete"
+                      />
+                    </div>
+                    <div className="message-body" data-cy="CommentBody">
+                      {comment.body}
+                    </div>
+                  </article>
+                ))}
+              </>
             )}
 
-            {!showNewCommentForm && (
+            {!showNewCommentForm && !commentsError && (
               <button
                 type="button"
                 className="button is-link"
                 onClick={() => setShowNewCommentForm(true)}
+                data-cy="WriteCommentButton"
               >
                 Write a comment
               </button>
             )}
 
-            {showNewCommentForm && (
+            {showNewCommentForm && !commentsError && (
               <NewCommentForm postId={post.id} onAddComment={addComment} />
             )}
           </div>

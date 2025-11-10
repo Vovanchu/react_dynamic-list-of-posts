@@ -15,6 +15,7 @@ export const App = () => {
   const [selectedUserId, setSelectedUserId] = useState<number | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [selectedPostId, setSelectedPostId] = useState<number | null>(null);
+  const [showNewCommentForm, setShowNewCommentForm] = useState(false);
 
   useEffect(() => {
     client
@@ -58,6 +59,7 @@ export const App = () => {
                   <PostsList
                     userId={selectedUserId}
                     setSelectedPostId={setSelectedPostId}
+                    setShowNewCommentForm={setShowNewCommentForm}
                   />
                 </div>
               ) : (
@@ -83,10 +85,12 @@ export const App = () => {
               <>
                 <div className="tile is-child box is-success ">
                   <div className="content" data-cy="PostDetails">
-                  <PostDetails
-                    selectedPostId={selectedPostId}
-                    userId={selectedUserId}
-                  />
+                    <PostDetails
+                      selectedPostId={selectedPostId}
+                      userId={selectedUserId}
+                      showNewCommentForm={showNewCommentForm}
+                      setShowNewCommentForm={setShowNewCommentForm}
+                    />
                   </div>
                 </div>
               </>
