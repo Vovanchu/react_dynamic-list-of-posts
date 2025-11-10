@@ -1,4 +1,3 @@
-// hooks/useComments.ts
 import { useEffect, useState } from 'react';
 import { client } from '../../utils/fetchClient';
 import { Comment } from '../../types/Comment';

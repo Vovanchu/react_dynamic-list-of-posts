@@ -49,11 +49,13 @@ export const PostDetails: React.FC<Props> = ({
   };
 
   const handleDelete = async (commentId: number) => {
+    setComments(prev => prev.filter(comment => comment.id !== commentId));
+
     try {
       await client.delete(`/comments/${commentId}`);
-      setComments(prev => prev.filter(comment => comment.id !== commentId));
     } catch {
       alert('Something went wrong!');
+      setComments(prev => [...prev, comments.find(c => c.id === commentId)!]);
     }
   };
 

@@ -1,4 +1,3 @@
-// hooks/usePosts.ts
 import { useEffect, useState } from 'react';
 import { client } from '../../utils/fetchClient';
 import { Post } from '../../types/Post';

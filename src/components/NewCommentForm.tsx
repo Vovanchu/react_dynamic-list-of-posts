@@ -45,13 +45,32 @@ export const NewCommentForm: React.FC<Props> = ({ postId, onAddComment }) => {
       });
 
       onAddComment(savedComment);
-      setBody('');
-      setName('');
-      setEmail('');
-    } catch (err) {
+      setBody(''); // тільки очищаємо тіло коментаря
+    } catch {
       alert('Something went wrong!');
     } finally {
       setSubmitting(false);
+    }
+  };
+
+  const handleNameChange = (value: string) => {
+    setName(value);
+    if (errorName && value.trim() !== '') {
+      setErrorName(false);
+    }
+  };
+
+  const handleEmailChange = (value: string) => {
+    setEmail(value);
+    if (errorEmail && value.trim() !== '') {
+      setErrorEmail(false);
+    }
+  };
+
+  const handleBodyChange = (value: string) => {
+    setBody(value);
+    if (errorBody && value.trim() !== '') {
+      setErrorBody(false);
     }
   };
 
@@ -78,7 +97,7 @@ export const NewCommentForm: React.FC<Props> = ({ postId, onAddComment }) => {
             id="comment-author-name"
             placeholder="Name Surname"
             className={`input ${errorName ? 'is-danger' : ''}`}
-            onChange={newCommentTitle => setName(newCommentTitle.target.value)}
+            onChange={e => handleNameChange(e.target.value)}
           />
 
           <span className="icon is-small is-left">
@@ -114,7 +133,7 @@ export const NewCommentForm: React.FC<Props> = ({ postId, onAddComment }) => {
             id="comment-author-email"
             placeholder="email@test.com"
             className={`input ${errorEmail ? 'is-danger' : ''}`}
-            onChange={newCommentEmail => setEmail(newCommentEmail.target.value)}
+            onChange={e => handleEmailChange(e.target.value)}
           />
 
           <span className="icon is-small is-left">
@@ -150,7 +169,7 @@ export const NewCommentForm: React.FC<Props> = ({ postId, onAddComment }) => {
             placeholder="Type comment here"
             value={body}
             className={`textarea ${errorBody ? 'is-danger' : ''}`}
-            onChange={newCommentBody => setBody(newCommentBody.target.value)}
+            onChange={e => handleBodyChange(e.target.value)}
           />
         </div>
 
